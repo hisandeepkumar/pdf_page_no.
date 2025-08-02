@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modern PDF Page Number Adder</title>
+  <title>PDF Page Number Adder</title>
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -586,7 +586,7 @@
         reader.readAsArrayBuffer(file);
       }
       
-      // Add page numbers to PDF
+      // Add page numbers to PDF (FIXED: now always bottom-right)
       async function addPageNumbers() {
         if (!pdfDoc) {
           setStatus('Please upload a PDF first', 'error');
@@ -612,7 +612,7 @@
             const progress = Math.floor(((i + 1) / totalPages) * 100);
             updateProgress(progress);
             
-            // Add page number with black background
+            // Add page number with black background at bottom-right corner
             const fontSize = 12;
             const padding = 8;
             const text = `Page ${i + 1}`;
@@ -620,9 +620,9 @@
             const boxWidth = textWidth + padding * 2;
             const boxHeight = fontSize + padding * 2;
             
-            // Position at bottom center
-            const x = (width - boxWidth) / 2;
-            const y = 30;
+            // Position at bottom-right (with 40px right margin and 30px bottom margin)
+            const x = width - boxWidth - 40;
+            const y = 30; // Bottom margin
             
             // Draw rounded background rectangle
             page.drawRectangle({
