@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern PDF Page Number Adder</title>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .header {
+      background: linear-gradient(90deg, #4361ee, #3a0ca3);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .header h1 {
+      font-weight: 700;
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .header p {
+      opacity: 0.85;
+      font-size: 1.1rem;
+      max-width: 80%;
+      margin: 0 auto;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .upload-area {
+      border: 2px dashed #4361ee;
+      border-radius: 16px;
+      padding: 40px 20px;
+      text-align: center;
+      background: rgba(67, 97, 238, 0.05);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 25px;
+    }
+
+    .upload-area:hover {
+      background: rgba(67, 97, 238, 0.1);
+    }
+
+    .upload-area i {
+      font-size: 48px;
+      color: #4361ee;
+      margin-bottom: 15px;
+    }
+
+    .upload-area h3 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
+
+    .upload-area p {
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #4361ee, #3a0ca3);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      margin: 10px 5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:disabled {
+      background: #b0b0b0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #4361ee;
+      border: 2px solid #4361ee;
+      box-shadow: none;
+    }
+
+    .progress-container {
+      margin: 30px 0;
+      background: #f0f4ff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .progress-bar {
+      height: 20px;
+      background: linear-gradient(90deg, #4cc9f0, #4361ee);
+      border-radius: 12px;
+      width: 0%;
+      transition: width 0.5s ease;
+      position: relative;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .status-container {
+      text-align: center;
+      margin: 20px 0;
+      min-height: 60px;
+    }
+
+    .status {
+      font-size: 1.1rem;
+      color: #333;
+      font-weight: 500;
+      padding: 10px;
+      border-radius: 12px;
+      background: #f0f8ff;
+      display: inline-block;
+    }
+
+    .status.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .status.error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .file-info {
+      background: #f0f4ff;
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px 0;
+      display: none;
+    }
+
+    .file-info.show {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+
+    .file-info p {
+      margin: 8px 0;
+      color: #333;
+    }
+
+    .file-info span {
+      font-weight: 600;
+      color: #4361ee;
+    }
+
+    .download-section {
+      text-align: center;
+      margin-top: 20px;
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+
+    .download-section.show {
+      display: block;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-top: 25px;
+    }
+
+    .feature {
+      background: rgba(67, 97, 238, 0.08);
+      border-radius: 12px;
+      padding: 15px 10px;
+      text-align: center;
+    }
+
+    .feature i {
+      color: #4361ee;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      font-size: 0.9rem;
+      color: #555;
+      font-weight: 500;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4); }
+      70% { box-shadow: 0 0 0 12px rgba(67, 97, 238, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+    }
+
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+
+    @media (max-width: 600px) {
+      .header {
+        padding: 25px 15px;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .header h1 {
+        font-size: 1.8rem;
+      }
+      
+      .btn {
+        padding: 14px 26px;
+        font-size: 1rem;
+      }
+      
+      .features {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-file-pdf"></i> PDF Page Number Adder</h1>
+      <p>Add professional page numbers to any PDF document</p>
+    </div>
+    
+    <div class="content">
+      <div class="upload-area" id="uploadArea">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <h3>Upload PDF File</h3>
+        <p>Click here or drag and drop your PDF file</p>
+        <p class="small">Max file size: 25MB</p>
+      </div>
+      
+      <input type="file" id="pdfUpload" accept="application/pdf" hidden>
+      
+      <div class="file-info" id="fileInfo">
+        <p>File: <span id="fileName">-</span></p>
+        <p>Size: <span id="fileSize">-</span></p>
+        <p>Pages: <span id="pageCount">-</span></p>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar">
+          <div class="progress-text" id="progressText">0%</div>
+        </div>
+      </div>
+      
+      <div class="status-container">
+        <div class="status" id="status">Ready to process your PDF</div>
+      </div>
+      
+      <div class="actions">
+        <button class="btn" id="processBtn" disabled>
+          <i class="fas fa-cogs"></i> Add Page Numbers
+        </button>
+        <button class="btn btn-secondary" id="resetBtn">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+      
+      <div class="download-section" id="downloadSection">
+        <button class="btn pulse" id="downloadBtn">
+          <i class="fas fa-download"></i> Download Numbered PDF
+        </button>
+      </div>
+      
+      <div class="features">
+        <div class="feature">
+          <i class="fas fa-mobile-alt"></i>
+          <p>Mobile Vibration</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-tachometer-alt"></i>
+          <p>Fast Processing</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-infinity"></i>
+          <p>Unlimited Pages</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-shield-alt"></i>
+          <p>Secure Processing</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const uploadArea = document.getElementById('uploadArea');
+      const fileInput = document.getElementById('pdfUpload');
+      const processBtn = document.getElementById('processBtn');
+      const resetBtn = document.getElementById('resetBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const fileInfo = document.getElementById('fileInfo');
+      const fileName = document.getElementById('fileName');
+      const fileSize = document.getElementById('fileSize');
+      const pageCount = document.getElementById('pageCount');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+      const status = document.getElementById('status');
+      const downloadSection = document.getElementById('downloadSection');
+      
+      let pdfDoc = null;
+      let processedPdf = null;
+      
+      // Upload area click handler
+      uploadArea.addEventListener('click', () => {
+        fileInput.click();
+      });
+      
+      // Drag and drop functionality
+      uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.background = 'rgba(67, 97, 238, 0.15)';
+        uploadArea.style.borderColor = '#3a0ca3';
+      });
+      
+      uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.background = 'rgba(67, 97, 238, 0.05)';
+        uploadArea.style.borderColor = '#4361ee';
+      });
+      
+      uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.background = 'rgba(67, 97, 238, 0.05)';
+        uploadArea.style.borderColor = '#4361ee';
+        
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          handleFileSelection(e.dataTransfer.files[0]);
+        }
+      });
+      
+      // File input change handler
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          handleFileSelection(e.target.files[0]);
+        }
+      });
+      
+      // Process button click handler
+      processBtn.addEventListener('click', addPageNumbers);
+      
+      // Reset button click handler
+      resetBtn.addEventListener('click', resetApp);
+      
+      // Download button click handler
+      downloadBtn.addEventListener('click', downloadPDF);
+      
+      // Handle file selection
+      function handleFileSelection(file) {
+        if (file.type !== 'application/pdf') {
+          setStatus('Please select a PDF file', 'error');
+          return;
+        }
+        
+        // Show file info
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        pageCount.textContent = 'Detecting...';
+        fileInfo.classList.add('show');
+        
+        // Read the PDF to get page count
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          try {
+            const arrayBuffer = e.target.result;
+            pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+            const pages = pdfDoc.getPages();
+            pageCount.textContent = pages.length;
+            
+            // Enable process button
+            processBtn.disabled = false;
+            setStatus('PDF loaded successfully. Click "Add Page Numbers" to proceed');
+          } catch (error) {
+            setStatus('Error loading PDF: ' + error.message, 'error');
+            processBtn.disabled = true;
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
+      
+      // Add page numbers to PDF
+      async function addPageNumbers() {
+        if (!pdfDoc) {
+          setStatus('Please upload a PDF first', 'error');
+          return;
+        }
+        
+        // Disable buttons during processing
+        processBtn.disabled = true;
+        resetBtn.disabled = true;
+        
+        try {
+          setStatus('Processing PDF...');
+          
+          const pages = pdfDoc.getPages();
+          const totalPages = pages.length;
+          const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
+          
+          for (let i = 0; i < totalPages; i++) {
+            const page = pages[i];
+            const { width, height } = page.getSize();
+            
+            // Update progress
+            const progress = Math.floor(((i + 1) / totalPages) * 100);
+            updateProgress(progress);
+            
+            // Add page number
+            const fontSize = 12;
+            const text = `Page ${i + 1} of ${totalPages}`;
+            const textWidth = font.widthOfTextAtSize(text, fontSize);
+            
+            page.drawText(text, {
+              x: width - textWidth - 40,
+              y: 30,
+              size: fontSize,
+              font: font,
+              color: PDFLib.rgb(0.2, 0.2, 0.2)
+            });
+            
+            // Add decorative line
+            page.drawLine({
+              start: { x: width - textWidth - 50, y: 25 },
+              end: { x: width - 30, y: 25 },
+              thickness: 1,
+              color: PDFLib.rgb(0.4, 0.4, 0.8),
+              opacity: 0.7
+            });
+            
+            // Simulate processing time
+            await new Promise(resolve => setTimeout(resolve, 20));
+          }
+          
+          // Save the modified PDF
+          processedPdf = await pdfDoc.save();
+          
+          // Complete progress
+          updateProgress(100);
+          
+          // Show success message
+          setStatus('PDF processed successfully!', 'success');
+          
+          // Show download section
+          downloadSection.classList.add('show');
+          
+          // Trigger notification
+          showNotification();
+          
+          // Re-enable reset button
+          resetBtn.disabled = false;
+        } catch (error) {
+          setStatus('Error processing PDF: ' + error.message, 'error');
+          processBtn.disabled = false;
+          resetBtn.disabled = false;
+        }
+      }
+      
+      // Download the processed PDF
+      function downloadPDF() {
+        if (!processedPdf) return;
+        
+        const blob = new Blob([processedPdf], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'numbered-document.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+      
+      // Reset the application
+      function resetApp() {
+        fileInput.value = '';
+        pdfDoc = null;
+        processedPdf = null;
+        
+        // Reset UI
+        fileInfo.classList.remove('show');
+        downloadSection.classList.remove('show');
+        processBtn.disabled = true;
+        updateProgress(0);
+        setStatus('Ready to process your PDF');
+      }
+      
+      // Update progress bar
+      function updateProgress(percent) {
+        progressBar.style.width = `${percent}%`;
+        progressText.textContent = `${percent}%`;
+      }
+      
+      // Set status message
+      function setStatus(message, type) {
+        status.textContent = message;
+        status.className = 'status';
+        if (type) status.classList.add(type);
+      }
+      
+      // Show notification (vibrate if possible)
+      function showNotification() {
+        // Try to vibrate
+        if (navigator.vibrate) {
+          navigator.vibrate([200, 100, 200]);
+        }
+        
+        // Show visual notification
+        status.classList.add('pulse');
+        setTimeout(() => status.classList.remove('pulse'), 2000);
+      }
+      
+      // Format file size
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' bytes';
+        else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+        else return (bytes / 1048576).toFixed(1) + ' MB';
+      }
+    });
+  </script>
+</body>
+</html>
