@@ -15,38 +15,53 @@
     }
 
     body {
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
+      color: #fff;
     }
 
     .container {
       width: 100%;
-      max-width: 600px;
-      background: rgba(255, 255, 255, 0.95);
+      max-width: 700px;
+      background: rgba(25, 25, 45, 0.85);
       border-radius: 24px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
       overflow: hidden;
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .header {
-      background: linear-gradient(90deg, #4361ee, #3a0ca3);
+      background: linear-gradient(90deg, #0f3460, #1a1a2e);
       color: white;
       padding: 30px;
       text-align: center;
       position: relative;
     }
 
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #e94560, #0d7377);
+    }
+
     .header h1 {
       font-weight: 700;
-      font-size: 2.2rem;
+      font-size: 2.5rem;
       margin-bottom: 8px;
       letter-spacing: -0.5px;
+      background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     .header p {
@@ -54,6 +69,7 @@
       font-size: 1.1rem;
       max-width: 80%;
       margin: 0 auto;
+      color: #a9b7c6;
     }
 
     .content {
@@ -61,55 +77,85 @@
     }
 
     .upload-area {
-      border: 2px dashed #4361ee;
+      border: 2px dashed #0d7377;
       border-radius: 16px;
       padding: 40px 20px;
       text-align: center;
-      background: rgba(67, 97, 238, 0.05);
+      background: rgba(13, 115, 119, 0.1);
       cursor: pointer;
       transition: all 0.3s ease;
       margin-bottom: 25px;
+      position: relative;
+      overflow: hidden;
     }
 
     .upload-area:hover {
-      background: rgba(67, 97, 238, 0.1);
+      background: rgba(13, 115, 119, 0.2);
+      border-color: #0dc9d2;
     }
 
     .upload-area i {
-      font-size: 48px;
-      color: #4361ee;
+      font-size: 60px;
+      color: #0d7377;
       margin-bottom: 15px;
+      transition: all 0.3s;
+    }
+
+    .upload-area:hover i {
+      color: #0dc9d2;
+      transform: scale(1.1);
     }
 
     .upload-area h3 {
-      color: #333;
+      color: #fff;
       margin-bottom: 10px;
-      font-size: 1.4rem;
+      font-size: 1.6rem;
+      font-weight: 600;
     }
 
     .upload-area p {
-      color: #666;
+      color: #a9b7c6;
       margin-bottom: 15px;
+      font-size: 1.1rem;
     }
 
     .btn {
       display: inline-block;
-      background: linear-gradient(90deg, #4361ee, #3a0ca3);
+      background: linear-gradient(90deg, #0d7377, #0dc9d2);
       color: white;
       border: none;
-      padding: 16px 32px;
-      border-radius: 12px;
+      padding: 16px 36px;
+      border-radius: 50px;
       font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+      box-shadow: 0 5px 20px rgba(13, 115, 119, 0.4);
       margin: 10px 5px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #0dc9d2, #0d7377);
+      transition: all 0.4s;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      width: 100%;
     }
 
     .btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+      box-shadow: 0 8px 25px rgba(13, 115, 119, 0.6);
     }
 
     .btn:active {
@@ -117,34 +163,40 @@
     }
 
     .btn:disabled {
-      background: #b0b0b0;
+      background: #4a5568;
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
     }
 
+    .btn:disabled::before {
+      display: none;
+    }
+
     .btn-secondary {
-      background: white;
-      color: #4361ee;
-      border: 2px solid #4361ee;
+      background: transparent;
+      color: #0dc9d2;
+      border: 2px solid #0dc9d2;
       box-shadow: none;
     }
 
     .progress-container {
       margin: 30px 0;
-      background: #f0f4ff;
+      background: rgba(13, 115, 119, 0.15);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+      height: 25px;
     }
 
     .progress-bar {
-      height: 20px;
-      background: linear-gradient(90deg, #4cc9f0, #4361ee);
+      height: 100%;
+      background: linear-gradient(90deg, #0d7377, #0dc9d2);
       border-radius: 12px;
       width: 0%;
       transition: width 0.5s ease;
       position: relative;
+      box-shadow: 0 0 15px rgba(13, 199, 210, 0.3);
     }
 
     .progress-text {
@@ -154,41 +206,55 @@
       transform: translate(-50%, -50%);
       color: white;
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
     .status-container {
       text-align: center;
-      margin: 20px 0;
+      margin: 25px 0;
       min-height: 60px;
+      display: flex;
+      justify-content: center;
     }
 
     .status {
       font-size: 1.1rem;
-      color: #333;
+      color: #fff;
       font-weight: 500;
-      padding: 10px;
-      border-radius: 12px;
-      background: #f0f8ff;
-      display: inline-block;
+      padding: 15px 25px;
+      border-radius: 50px;
+      background: rgba(13, 115, 119, 0.2);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(13, 199, 210, 0.3);
+    }
+
+    .status i {
+      font-size: 1.3rem;
     }
 
     .status.success {
-      background: #e8f5e9;
-      color: #2e7d32;
+      background: rgba(46, 213, 115, 0.15);
+      color: #2ed573;
+      border-color: rgba(46, 213, 115, 0.3);
     }
 
     .status.error {
-      background: #ffebee;
-      color: #c62828;
+      background: rgba(255, 107, 107, 0.15);
+      color: #ff6b6b;
+      border-color: rgba(255, 107, 107, 0.3);
     }
 
     .file-info {
-      background: #f0f4ff;
-      border-radius: 12px;
-      padding: 15px;
-      margin: 20px 0;
+      background: rgba(13, 115, 119, 0.1);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 25px 0;
       display: none;
+      border: 1px solid rgba(13, 199, 210, 0.1);
     }
 
     .file-info.show {
@@ -197,18 +263,22 @@
     }
 
     .file-info p {
-      margin: 8px 0;
-      color: #333;
+      margin: 10px 0;
+      color: #a9b7c6;
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(169, 183, 198, 0.1);
     }
 
     .file-info span {
       font-weight: 600;
-      color: #4361ee;
+      color: #0dc9d2;
     }
 
     .download-section {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 25px;
       display: none;
       animation: fadeIn 0.5s;
     }
@@ -219,46 +289,98 @@
 
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 15px;
-      margin-top: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
     }
 
     .feature {
-      background: rgba(67, 97, 238, 0.08);
-      border-radius: 12px;
-      padding: 15px 10px;
+      background: rgba(13, 115, 119, 0.1);
+      border-radius: 16px;
+      padding: 20px 15px;
       text-align: center;
+      transition: all 0.3s;
+      border: 1px solid rgba(13, 199, 210, 0.1);
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      background: rgba(13, 115, 119, 0.2);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     .feature i {
-      color: #4361ee;
-      font-size: 24px;
-      margin-bottom: 10px;
+      color: #0dc9d2;
+      font-size: 32px;
+      margin-bottom: 15px;
+      background: rgba(13, 115, 119, 0.2);
+      width: 70px;
+      height: 70px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .feature h4 {
+      color: #fff;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
     }
 
     .feature p {
       font-size: 0.9rem;
-      color: #555;
-      font-weight: 500;
+      color: #a9b7c6;
+      font-weight: 400;
+    }
+
+    .preview {
+      display: flex;
+      justify-content: center;
+      margin: 25px 0;
+    }
+
+    .page-preview {
+      width: 180px;
+      height: 240px;
+      background: #0f3460;
+      border-radius: 10px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: 15px;
+    }
+
+    .page-number {
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      display: inline-flex;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4); }
-      70% { box-shadow: 0 0 0 12px rgba(67, 97, 238, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(13, 199, 210, 0.7); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(13, 199, 210, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(13, 199, 210, 0); }
     }
 
     .pulse {
-      animation: pulse 1.5s infinite;
+      animation: pulse 2s infinite;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .header {
         padding: 25px 15px;
       }
@@ -268,16 +390,18 @@
       }
       
       .header h1 {
-        font-size: 1.8rem;
+        font-size: 2rem;
       }
       
       .btn {
-        padding: 14px 26px;
+        padding: 14px 28px;
         font-size: 1rem;
+        width: 100%;
+        margin: 8px 0;
       }
       
       .features {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -290,19 +414,25 @@
     </div>
     
     <div class="content">
+      <div class="preview">
+        <div class="page-preview">
+          <div class="page-number">Page 1</div>
+        </div>
+      </div>
+      
       <div class="upload-area" id="uploadArea">
         <i class="fas fa-cloud-upload-alt"></i>
         <h3>Upload PDF File</h3>
         <p>Click here or drag and drop your PDF file</p>
-        <p class="small">Max file size: 25MB</p>
+        <p>Supports PDFs of any size</p>
       </div>
       
       <input type="file" id="pdfUpload" accept="application/pdf" hidden>
       
       <div class="file-info" id="fileInfo">
-        <p>File: <span id="fileName">-</span></p>
-        <p>Size: <span id="fileSize">-</span></p>
-        <p>Pages: <span id="pageCount">-</span></p>
+        <p>File Name: <span id="fileName">-</span></p>
+        <p>File Size: <span id="fileSize">-</span></p>
+        <p>Total Pages: <span id="pageCount">-</span></p>
       </div>
       
       <div class="progress-container">
@@ -312,7 +442,10 @@
       </div>
       
       <div class="status-container">
-        <div class="status" id="status">Ready to process your PDF</div>
+        <div class="status" id="status">
+          <i class="fas fa-info-circle"></i>
+          <span>Ready to process your PDF</span>
+        </div>
       </div>
       
       <div class="actions">
@@ -332,20 +465,24 @@
       
       <div class="features">
         <div class="feature">
+          <i class="fas fa-infinity"></i>
+          <h4>Unlimited Pages</h4>
+          <p>Works with PDFs of any size</p>
+        </div>
+        <div class="feature">
+          <i class="fas fa-paint-brush"></i>
+          <h4>Modern Design</h4>
+          <p>Beautiful page number styling</p>
+        </div>
+        <div class="feature">
           <i class="fas fa-mobile-alt"></i>
-          <p>Mobile Vibration</p>
+          <h4>Mobile Ready</h4>
+          <p>Vibration notifications</p>
         </div>
         <div class="feature">
           <i class="fas fa-tachometer-alt"></i>
-          <p>Fast Processing</p>
-        </div>
-        <div class="feature">
-          <i class="fas fa-infinity"></i>
-          <p>Unlimited Pages</p>
-        </div>
-        <div class="feature">
-          <i class="fas fa-shield-alt"></i>
-          <p>Secure Processing</p>
+          <h4>Fast Processing</h4>
+          <p>Optimized for large files</p>
         </div>
       </div>
     </div>
@@ -365,7 +502,9 @@
       const progressBar = document.getElementById('progressBar');
       const progressText = document.getElementById('progressText');
       const status = document.getElementById('status');
+      const statusText = status.querySelector('span');
       const downloadSection = document.getElementById('downloadSection');
+      const statusIcon = status.querySelector('i');
       
       let pdfDoc = null;
       let processedPdf = null;
@@ -378,19 +517,19 @@
       // Drag and drop functionality
       uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
-        uploadArea.style.background = 'rgba(67, 97, 238, 0.15)';
-        uploadArea.style.borderColor = '#3a0ca3';
+        uploadArea.style.background = 'rgba(13, 115, 119, 0.2)';
+        uploadArea.style.borderColor = '#0dc9d2';
       });
       
       uploadArea.addEventListener('dragleave', () => {
-        uploadArea.style.background = 'rgba(67, 97, 238, 0.05)';
-        uploadArea.style.borderColor = '#4361ee';
+        uploadArea.style.background = 'rgba(13, 115, 119, 0.1)';
+        uploadArea.style.borderColor = '#0d7377';
       });
       
       uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
-        uploadArea.style.background = 'rgba(67, 97, 238, 0.05)';
-        uploadArea.style.borderColor = '#4361ee';
+        uploadArea.style.background = 'rgba(13, 115, 119, 0.1)';
+        uploadArea.style.borderColor = '#0d7377';
         
         if (e.dataTransfer.files.length) {
           fileInput.files = e.dataTransfer.files;
@@ -473,30 +612,40 @@
             const progress = Math.floor(((i + 1) / totalPages) * 100);
             updateProgress(progress);
             
-            // Add page number
+            // Add page number with black background
             const fontSize = 12;
-            const text = `Page ${i + 1} of ${totalPages}`;
+            const padding = 8;
+            const text = `Page ${i + 1}`;
             const textWidth = font.widthOfTextAtSize(text, fontSize);
+            const boxWidth = textWidth + padding * 2;
+            const boxHeight = fontSize + padding * 2;
             
+            // Position at bottom center
+            const x = (width - boxWidth) / 2;
+            const y = 30;
+            
+            // Draw rounded background rectangle
+            page.drawRectangle({
+              x: x,
+              y: y,
+              width: boxWidth,
+              height: boxHeight,
+              color: PDFLib.rgb(0, 0, 0),
+              borderWidth: 0,
+              borderColor: PDFLib.rgb(0, 0, 0),
+              opacity: 1,
+              borderOpacity: 1,
+              borderRoundedRadius: 15,
+            });
+            
+            // Draw white bold page number
             page.drawText(text, {
-              x: width - textWidth - 40,
-              y: 30,
+              x: x + padding,
+              y: y + padding,
               size: fontSize,
               font: font,
-              color: PDFLib.rgb(0.2, 0.2, 0.2)
+              color: PDFLib.rgb(1, 1, 1),
             });
-            
-            // Add decorative line
-            page.drawLine({
-              start: { x: width - textWidth - 50, y: 25 },
-              end: { x: width - 30, y: 25 },
-              thickness: 1,
-              color: PDFLib.rgb(0.4, 0.4, 0.8),
-              opacity: 0.7
-            });
-            
-            // Simulate processing time
-            await new Promise(resolve => setTimeout(resolve, 20));
           }
           
           // Save the modified PDF
@@ -550,6 +699,9 @@
         processBtn.disabled = true;
         updateProgress(0);
         setStatus('Ready to process your PDF');
+        
+        // Reset status icon
+        statusIcon.className = 'fas fa-info-circle';
       }
       
       // Update progress bar
@@ -560,9 +712,17 @@
       
       // Set status message
       function setStatus(message, type) {
-        status.textContent = message;
+        statusText.textContent = message;
         status.className = 'status';
-        if (type) status.classList.add(type);
+        statusIcon.className = 'fas fa-info-circle';
+        
+        if (type === 'success') {
+          status.classList.add('success');
+          statusIcon.className = 'fas fa-check-circle';
+        } else if (type === 'error') {
+          status.classList.add('error');
+          statusIcon.className = 'fas fa-exclamation-circle';
+        }
       }
       
       // Show notification (vibrate if possible)
@@ -573,8 +733,7 @@
         }
         
         // Show visual notification
-        status.classList.add('pulse');
-        setTimeout(() => status.classList.remove('pulse'), 2000);
+        downloadBtn.classList.add('pulse');
       }
       
       // Format file size
